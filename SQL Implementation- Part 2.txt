@@ -1,0 +1,394 @@
+CREATE DATABASE temp;
+		-- OR
+CREATE DATABASE IF NOT EXISTS temp;
+
+SHOW DATABASES;
+USE temp;
+
+CREATE TABLE Customer (
+	id integer PRIMARY KEY,
+    cname Varchar(255),
+    Address Varchar(255),
+    Gender char(2),
+    City Varchar(255),
+    Pincode integer
+    );
+
+INSERT INTO Customer
+VALUES (1251, 'Ram Kumar', 'Dilbagh Nagar', 'M', 'Jalandhar', 144002),
+	   (1300, 'Shyam Singh', 'Ludhiana H.O', 'M', 'Ludhiana', 141001),
+       (245, 'Neelabh Shukla', 'Ashok Nagar', 'M', 'Jalandhar', 144003),
+       (210, 'Barkha Singh', 'Dilbagh Nagar', 'F', 'Jalandhar', 144002),
+       (500, 'Rohan Arora', 'Ludhiana H.O', 'M', 'Ludhiana', 141001);
+
+INSERT INTO Customer
+VALUES (1252, 'Ram Kumar3', 'Dilbagh Nagar', 'M', 'Jalandhar', NULL);
+
+CREATE TABLE Order_details (
+	Order_id integer PRIMARY KEY,
+    delivery_date DATE,
+    cust_id INT,
+    FOREIGN KEY(cust_id) references Customer(id) ON DELETE CASCADE
+    );
+
+INSERT INTO Order_details
+VALUES (1, '2019-03-11', 245);
+
+INSERT INTO Order_details
+VALUES (2, '2019-03-12', 245);
+
+CREATE TABLE Order_details (
+	Order_id integer PRIMARY KEY,
+    delivery_date DATE,
+    cust_id INT,
+    FOREIGN KEY(cust_id) references Customer(id) ON DELETE SET NULL
+    );
+
+INSERT INTO Order_details
+VALUES (1, '2019-03-11', 245);
+
+INSERT INTO Order_details
+VALUES (2, '2019-03-12', 245);
+
+DELETE FROM Customer WHERE id = 245;
+
+CREATE table account (
+id int PRIMARY KEY,
+name Varchar(255) UNIQUE,
+balance INT,
+CONSTRAINT acc_balance_chk CHECK(balance > 1000)
+);
+
+INSERT INTO account (id, name, balance)
+values (1, 'A', 10000);
+
+INSERT INTO account (id, name, balance)
+values (2, 'B', 10000);
+
+-- This will not work because balance must be > 1000
+INSERT INTO account (id, name, balance)
+values (3, 'C', 100);
+INSERT INTO account (id, name, balance)
+values (3, 'C', 1000);
+
+SELECT * from account;
+
+DROP TABLE account;
+
+show tables;
+
+-- CREATE A NEW ACCOUNT TABLE WHERE BALANCE SHOULD BE NULL BY DEFAULT
+CREATE table account (
+id int PRIMARY KEY,
+name Varchar(255) UNIQUE,
+balance INT NOT NULL DEFAULT 0
+);
+
+INSERT INTO account (id, name, balance)
+values (1, 'A', 10000);
+
+INSERT INTO account (id, name)
+values (2, 'B');
+
+-- ADD new column
+ALTER TABLE account ADD interest FLOAT NOT NULL DEFAULT 0;
+
+-- MODIFY
+ALTER TABLE account MODIFY interest DOUBLE NOT NULL DEFAULT 0;
+
+-- DESCRIBE
+DESC account;
+
+-- CHANGE COLUMN - RENAME THE COLUMN
+ALTER TABLE account CHANGE COLUMN interest saving_interest FLOAT NOT NULL DEFAULT 0;
+
+-- DROP COLUMN
+ALTER TABLE account DROP COLUMN saving_interest;
+
+-- RENAME THE TABLE
+ALTER TABLE account RENAME TO account_details;
+
+			-- DML (DATA MANIPULATION LANGUAGE)
+CREATE DATABASE temp;
+		-- OR
+CREATE DATABASE IF NOT EXISTS temp;
+
+SHOW DATABASES;
+USE temp;
+
+CREATE TABLE Customer (
+	id integer PRIMARY KEY,
+    cname Varchar(255),
+    Address Varchar(255),
+    Gender char(2),
+    City Varchar(255),
+    Pincode integer
+    );
+show tables;
+
+-- 1. INSERT
+
+INSERT INTO Customer(id, cname, Address, Gender, City, Pincode)
+VALUES (1252, 'Ram Kumar3', 'Dilbagh Nagar', 'M', 'Jalandhar', NULL);
+
+SELECT * FROM customer;
+
+INSERT INTO Customer
+VALUES (1251, 'Ram Kumar', 'Dilbagh Nagar', 'M', 'Jalandhar', 144002),
+	   (1300, 'Shyam Singh', 'Ludhiana H.O', 'M', 'Ludhiana', 141001),
+       (245, 'Neelabh Shukla', 'Ashok Nagar', 'M', 'Jalandhar', 144003),
+       (210, 'Barkha Singh', 'Dilbagh Nagar', 'F', 'Jalandhar', 144002),
+       (500, 'Rohan Arora', 'Ludhiana H.O', 'M', 'Ludhiana', 141001);
+       
+INSERT INTO Customer VALUES ('511', 'Sudh', 'G.V Dehradun', 'M', 'UTTARAKHAND', 248001);
+
+
+
+INSERT INTO Customer(id, cname) 
+VALUES (121, 'Bob');
+
+-- 2. UPDATE
+UPDATE Customer SET Address = 'Mumbai', Gender = 'M' WHERE id = 121;
+
+-- UPDATE MULTIPLE ROWS
+SET SQL_SAFE_UPDATES = 1;
+UPDATE Customer SET Pincode = 110000;
+
+UPDATE Customer SET Pincode = Pincode + 1;
+
+	-- 2.1 ON UPDATE CASCADE
+
+
+-- 3. DELETE
+DELETE FROM Customer Where id = 245;
+
+	-- SET SQL_SAFE_UPDATES = 0;
+DELETE FROM Customer;
+
+SELECT * FROM customer;
+SELECT * FROM order_details;
+	-- 3.1 DELETE CASCADE
+    -- 3.2 ON DELETE NULL
+    
+
+-- 4. REPLACE
+REPLACE INTO Customer (id, City)
+VALUES(1251, 'Colony');
+
+		-- Behave like insert
+REPLACE INTO Customer (id, cname ,City)
+VALUES(1333,'Code','Colony');
+
+REPLACE INTO Customer SET id = 1300, cname = 'Mac', City = 'Utah';
+
+REPLACE INTO Customer(id, cname, City)
+	SELECT cname, City
+    FROM Customer WHERE id = 500;
+	
+-- ------------
+CREATE TABLE Client (id int PRIMARY KEY, first_name char(100), last_name char(100), age int, emailID char(200), PhoneNo char(10), City char(20), empID int);
+
+INSERT INTO Client (id, first_name, last_name, age, emailID, PhoneNo, City, empID) VALUES
+		(1, 'Mac', 'Rougers', 47, 'mac@hotmail.com', 333, 'Kolkata', 3),
+        (2, 'Max', 'Poirier', 27, 'max@gmail.com', 222, 'Kolkata', 3),
+        (3, 'Peter', 'Jain', 24, 'peter@abc.com', 111, 'Delhi', 1),
+        (4, 'Sushant', 'Aggarwal', 23, 'sushant@yahoo.com', 45454, 'Hyderabad', 5),
+        (5, 'Pratap', 'Singh', 36, 'p@xyz.com', 77767, 'Mumbai', 2);
+
+SELECT * FROM Client;
+
+CREATE TABLE Employee (id int PRIMARY KEY, fname char(100), lname char(100), Age int, emailID char(200), PhoneNo char(20), City char(20));
+
+INSERT INTO Employee (id, fname, lname , Age, emailID, PhoneNo, City) VALUES
+		(1, 'Aman', 'Proto', 32, 'aman@gmail.com', 898, 'Delhi'),
+        (2,'Yagya', 'Narayan', 44, 'yagya@gmail.com', 222, 'Palam'),
+        (3, 'Rahul', 'BD', 22, 'rahul@gmail.com', 444, 'Kolkata'),
+        (4, 'Jatin', 'Hermit', 31, 'jatin@gmail.com', 666, 'Raipur'),
+        (5, 'PK', 'Pandey', 21, 'pk@gmail.com', 555, 'Jaipur');
+
+SELECT * FROM Employee;
+
+CREATE TABLE Project (
+		id int, 
+        empID int, 
+        name char(100), 
+        startdate DATE, 
+        clientID int,
+		FOREIGN KEY(empID) references Client(id) ON DELETE CASCADE
+);
+
+INSERT INTO Project (id, empID, name, startdate, clientID) VALUES
+		(1, 1, 'A', '2021-04-21', 3),
+        (2, 2, 'B', '2021-03-12', 1),
+        (3, 3, 'C', '2021-01-16', 5),
+        (4, 3, 'D', '2021-04-27', 2),
+        (5, 5, 'E', '2021-05-01', 4);
+
+SELECT * FROM Project;
+DROP TABLE Project;
+Show tables;
+
+-- ------------
+
+
+-- JOIN
+
+-- INNER JOIN
+-- Enlist all the employees ID'S, names along with the project allocated to them.
+SELECT e.id, e.fname, e.lname, p.id, p.name from employee as e
+INNER JOIN project as p ON e.id = p.empID;
+
+
+SELECT * from employee as e
+INNER JOIN project as p ON e.id = p.empID;
+
+
+-- Fetch out all the employee ID'S and their contact detail who have been working From Jaipur with the clients name working in Hyderabad.
+SELECT e.id, e.emailID, e.phoneNo, c.first_name, c.last_name from Employee as e
+INNER JOIN Client as c ON e.id = c.empID WHERE e.city = 'Jaipur' AND c.City = 'Hyderabad';
+
+-- LEFT JOIN
+-- Fetch out each project alocated to each employee.
+SELECT * from Employee as e
+LEFT JOIN  Project as p ON e.id = p.empID;
+
+-- RIGHT JOIN
+-- List out all the projects along with the employee's name their respective allocated email ID.
+SELECT p.id, p.name, e.fname, e.lname, e.emailID FROM Employee as e
+RIGHT JOIN Project as p
+ON e.id = p.empID;
+
+-- CROSS JOIN
+-- List out all the combinations possible for the employee's name and projects that can exist.
+SELECT e.fname, e.lname, p.id, p.name from Employee as e
+CROSS JOIN Project as p;
+
+-- JOIN Without using Join keywords
+SELECT e.id, e.fname, e.lname, p.id, p.name from employee as e,
+project as p WHERE e.id = p.empID; 
+
+
+
+CREATE TABLE DEPT1 (empid int PRIMARY KEY, name char(100), role char(100));
+INSERT INTO DEPT1(empid, name, role) VALUES
+		(1, 'A', 'engineer'),
+        (2, 'B', 'salesman'),
+        (3, 'C', 'manager'),
+        (4, 'D', 'salesman'),
+        (5, 'E', 'engineer');
+SELECT * from DEPT1;
+
+CREATE TABLE DEPT2 (empid int PRIMARY KEY, name char(100), role char(100));
+INSERT INTO DEPT2(empid, name, role) VALUES
+		(3, 'C', 'manager'),
+        (6, 'F', 'marketing'),
+        (7, 'G', 'salesman');
+SELECT * from DEPT2;
+        
+-- SET OPERATIONS
+			-- UNION
+-- List out all the employees in the company
+SELECT * FROM DEPT1 
+UNION
+SELECT * FROM DEPT2;
+
+-- List out all the employee in all department who work as salesman
+SELECT * FROM DEPT1 WHERE role = 'salesman'
+UNION
+SELECT * FROM DEPT2 WHERE role = 'salesman';
+
+   
+						-- INTERSECT
+-- List out all the employees who work for both the departments.
+SELECT * From DEPT1 INNER JOIN DEPT2 using(empid);
+SELECT DEPT1.* From DEPT1 INNER JOIN DEPT2 using(empid);
+
+
+						-- MINUS
+-- List out all the employees working in dept1 but not in dept2.
+SELECT DEPT1.* from DEPT1 LEFT JOIN DEPT2 using(empid) 
+WHERE DEPT2.empid is NULL;
+
+-- SUB QUERIES
+			-- Alternative of Joins
+-- TOPICS:
+			-- Subquery using FROM clause
+			-- Subquery using SELECT
+			-- Derived Subquery
+			-- Co-related sub-queries 
+
+            
+-- WHERE clause same table
+-- employees with age > 30
+SELECT * from employee where age in (SELECT age from employee WHERE age > 30);
+
+-- WHERE clause different table
+-- emp details working in more than 1 project.
+SELECT * from Employee where id in (
+SELECT empId from project group by empID having count(empId) > 1
+);
+
+-- Single Value Subquery
+-- emp details having age > avg(age)
+SELECT * from Employee Where age > (select avg(age) from Employee);
+
+-- FROM clause - derived tables
+-- select max age person whose first name contains 'a'
+SELECT MAX(age) from (SELECT * from Employee Where fname like '%a%') AS temp;
+-- Print the name of the person -- MY ANS 
+SELECT fname from Employee WHERE age = (SELECT MAX(age) from Employee WHERE fname  like '%a%');
+
+
+-- Corelated subquery
+-- find 3rd oldest employee
+SELECT *
+FROM Employee e1
+Where 3 = (
+SELECT COUNT(e2.age)
+FROM Employee e2
+WHERE e2.age >= e1.age
+);
+
+
+
+--		JOIN                VS               SUB-QUERIES
+--		Faster                                 Slower
+--		Joins maximise calculation       	   Keeps responsibility of calculation on user.
+--		-burden on DBMS
+-- 		Complex, difficult to   		 	   Comparatively easy to understand and implement        
+-- 		understand and implement 
+--		Choosing optimal join for 		 	   EASY.
+--		optimal use case is difficult
+
+
+-- VIEW
+SELECT * FROM EMPLOYEE;
+
+-- Creating a view
+CREATE VIEW custom_view AS SELECT fname, age FROM EMPLOYEE;
+
+-- VIEWING FROM VIEW
+SELECT * FROM custom_view;
+
+-- ALTERING THE VIEW
+ALTER VIEW custom_view AS SELECT fname, lname, age FROM Employee;
+
+-- VIEWING FROM VIEW
+SELECT * FROM custom_view;
+
+-- DROPING THE VIEW
+DROP VIEW IF EXISTS custom_view;
+
+-- 50 Question interview Specific Given below in another file
+-- Home Work
+-- 1. NOTES MAKING
+-- 2. Practice
+
+
+
+
+
+
+
+
+

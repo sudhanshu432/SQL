@@ -1,0 +1,148 @@
+CREATE DATABASE ORG;
+SHOW DATABASES;
+USE ORG;
+
+CREATE TABLE Worker (
+	WORKER_ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    FIRST_NAME CHAR(25),
+    LAST_NAME CHAR(25),
+    SALARY INT(15),
+    JOINING_DATA DATETIME,
+    DEPARTMENT CHAR(25)
+);
+
+INSERT INTO Worker (WORKER_ID, FIRST_NAME, LAST_NAME, SALARY, JOINING_DATA, DEPARTMENT) VALUES
+	(001, 'Monika', 'Arora', 100000, '14-02-20 09.00.00', 'HR'),
+    (002, 'Niharika', 'Verma', 80000, '14-06-11 09.00.00', 'Admin'),
+    (003, 'Vishal', 'Singhal', 300000, '14-02-20 09.00.00', 'HR'),
+    (004, 'Amitabh', 'Singh', 500000, '14-06-11 09.00.00', 'Admin'),
+    (005, 'Vivek', 'Bhati', 500000, '14-06-11 09.00.00', 'Admin'),
+    (006, 'Vipul', 'Diwan', 200000, '14-06-11 09.00.00', 'Account'),
+    (007, 'Satish', 'Kumar', 75000, '14-01-20 09.00.00', 'Account'),
+    (008, 'Geetika', 'Chauhan', 90000, '14-04-11 09.00.00', 'Admin');
+
+SELECT * FROM Worker;
+
+CREATE TABLE Bonus(
+	WORKER_REF_ID INT,
+    BONUS_AMOUNT INT(10),
+    BONUS_DATE DATETIME,
+    FOREIGN KEY (WORKER_REF_ID)
+		REFERENCES Worker (WORKER_ID)
+		ON DELETE CASCADE
+);
+
+INSERT INTO Bonus
+	(WORKER_REF_ID, BONUS_AMOUNT, BONUS_DATE) VALUES
+		(001, 5000, '16-02-20'),
+        (002, 3000, '16-06-11'),
+        (003, 4000, '16-02-20'),
+        (001, 4500, '16-02-20'),
+        (002, 3500, '16-06-11');
+
+SELECT * FROM Bonus;
+        
+CREATE TABLE Title (
+	WORKER_REF_ID INT,
+    WORKER_TITLE CHAR(25),
+    AFFECTED_FROM DATETIME,
+    FOREIGN KEY (WORKER_REF_ID)
+		REFERENCES Worker (WORKER_ID)
+        ON DELETE CASCADE
+);
+
+show tables;
+
+INSERT INTO Title
+	(WORKER_REF_ID, WORKER_TITLE, AFFECTED_FROM) VALUES
+    (001, 'Manager', '2016-02-20 00:00:00'),
+    (002, 'Executive', '2016-06-11 00:00:00'),
+    (008, 'Executive', '2016-06-11 00:00:00'),
+    (005, 'Manager', '2016-06-11 00:00:00'),
+    (004, 'Asst. Manager', '2016-06-11 00:00:00'),
+    (007, 'Executive', '2016-06-11 00:00:00'),
+    (006, 'Lead', '2016-06-11 00:00:00'),
+    (003, 'Lead', '2016-06-11 00:00:00');
+    
+select * from Title;
+
+SELECT * FROM Worker;
+
+SELECT FIRST_NAME, SALARY FROM Worker;
+
+SELECT 44 + 20;
+SELECT now();
+SELECT lcase('SUDHANSHU');
+SELECT ucase('sudhanshu');
+
+SELECT * FROM Worker WHERE SALARY > 80000;
+
+SELECT * FROM Worker WHERE SALARY > 100000;
+
+SELECT * FROM Worker WHERE DEPARTMENT = 'HR';
+
+-- Salary [80000, 300000]
+SELECT * FROM Worker WHERE SALARY BETWEEN 80000 AND 300000;
+
+-- reduce OR Statements
+-- HR, ADMIN
+
+SELECT * from Worker Where DEPARTMENT = 'HR' OR DEPARTMENT = 'Admin';
+SELECT * from Worker Where DEPARTMENT = 'HR' OR DEPARTMENT = 'Admin' OR DEPARTMENT = 'Account';
+
+-- better way: IN
+SELECT * FROM Worker WHERE DEPARTMENT IN ('HR', 'Admin', 'Account');
+
+-- NOT
+SELECT * FROM Worker WHERE DEPARTMENT NOT IN ('HR', 'Admin');
+
+DESCRIBE Worker;
+
+INSERT INTO Worker (WORKER_ID, FIRST_NAME, LAST_NAME, SALARY, JOINING_DATA, DEPARTMENT) VALUES
+	(0111, 'Sudh', 'Arora', 100000, '14-02-20 09.00.00', NULL);
+
+-- IS NULL
+SELECT * FROM Worker Where DEPARTMENT IS NULL;
+
+-- WILDCARD
+		 -- Only those where First_Name contain i
+SELECT * FROM Worker Where first_name LIKE '%i%';
+						-- i must be at 2nd index
+SELECT * FROM Worker Where first_name LIKE '_i%';
+
+-- Sorting 
+				 -- Increasing Order
+SELECT * FROM Worker ORDER BY Salary;
+				-- OR 
+				 -- Ascending Order
+SELECT * FROM Worker ORDER BY Salary ASC;
+
+				 -- Descending Order
+SELECT * FROM Worker ORDER BY Salary DESC;
+
+-- DISTINCT
+SELECT DISTINCT Department from worker; 
+
+-- GROUP BY
+-- from se pyehle jo column ki list app deoge wahi column ki list aapko group by ke baad me v dena hoga 
+SELECT Department from Worker group by Department;
+
+-- Find the number of Workers per Department
+SELECT Department, count(Department)  from Worker group by Department;
+
+-- Find AVG Salary Per Department 
+SELECT Department, AVG(Salary) from Worker group by Department;
+
+-- Find MIN Salary Per Department 
+SELECT Department, MIN(Salary) from Worker group by Department;
+
+-- Find MAX Salary Per Department  (SUM)
+SELECT Department, MAX(Salary) from Worker group by Department;
+
+-- Find Total Salary Per Department  (SUM)
+SELECT Department, SUM(Salary) from Worker group by Department;
+
+-- GROUP BY HAVING (HAVING always works with GROUP BY ONLY) 
+SELECT Department, count(Department)  from Worker group by Department HAVING COUNT(Department) > 2; 
+
+
